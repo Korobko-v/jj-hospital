@@ -42,8 +42,6 @@ public class Database {
     }
 
 
-    //я так понимаю, замечание по наличию этого метода касалось ситуации, когда в мапу в базе данных я бы помещал в качестве ключа логин
-    //и пока не удалось понять, как проверить базу на отсутствие пользователя без данного метода с putIfAbsent, если в мапе пары "токен-доктор"
     public boolean containsDoctor(String login) {
         for (Doctor doctor : doctors.values()) {
             if (doctor.getLogin().equals(login)) {
