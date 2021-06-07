@@ -7,25 +7,133 @@ import ru.levelp.hospital.database.Database;
 import ru.levelp.hospital.exception.ServerErrorCode;
 import ru.levelp.hospital.exception.ServerException;
 import ru.levelp.hospital.model.Doctor;
-
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.List;
 import java.util.Map;
 
-import static ru.levelp.hospital.database.Database.getDatabase;
 
 public class DoctorDaoImpl implements DoctorDao {
+
     static ObjectMapper mapper = new ObjectMapper();
+    private final EntityManager manager;
+
+    public DoctorDaoImpl(EntityManager manager) {
+        this.manager = manager;
+    }
+
     @Override
     @SneakyThrows
-    public void insert(Doctor doctor) {
-        if (Database.getDatabase().containsDoctor(doctor.getLogin())) {
-            throw new ServerException(ServerErrorCode.USER_EXISTS);
+    public Doctor insert(Doctor doctor) {
+        manager.getTransaction().begin();
+
+        try {
+            manager.persist(doctor);
+            manager.getTransaction().commit();
         }
-        Database.getDatabase().insert(doctor);
+        catch (Exception e) {
+            manager.getTransaction().rollback();
+            throw e;
+        }
+        return doctor;
     }
+
+
+    public Doctor getDoctorById(int id) {
+        return manager.find(Doctor.class, id);
+    }
+
+
+    public Doctor getDoctorByLogin(String login) {
+        try {
+            return manager.createQuery("select d from Doctor d where d.login =:login_to_search", Doctor.class)
+                    .setParameter("login_to_search", login)
+                    .getSingleResult();
+        } catch (NoResultException notFound) {
+            return null;
+        }
+    }
+
+    public Doctor getDoctorByLoginAndPassword(String login, String password) {
+        try {
+            return manager.createQuery("select d from Doctor d where d.login =:login_to_search " +
+                    "and d.password =:pass", Doctor.class)
+                    .setParameter("pass", password)
+                    .setParameter("login_to_search", login)
+                    .getSingleResult();
+        } catch (NoResultException notFound) {
+            return null;
+        }
+    }
+
+    public Doctor updatePassword(String login, String newPass) {
+
+        try {
+//           String hql = "update Doctor d set d.password=:password where d.login =:login";
+//            Query query = manager.createQuery(hql).setParameter("password", newPass)
+//                    .setParameter("login", login);
+//            query.executeUpdate();
+//            return getDoctorByLogin(login);
+
+            Doctor toUpdate = manager.createQuery("select d from Doctor d where d.login =:login", Doctor.class)
+                    .setParameter("login", login)
+                    .getSingleResult();
+            delete(toUpdate);
+            toUpdate.setPassword(newPass);
+            insert(toUpdate);
+            return toUpdate;
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<Doctor> findAllSortedBy(String columnName) {
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+
+        CriteriaQuery<Doctor> query = builder.createQuery(Doctor.class);
+        Root<Doctor> root = query.from(Doctor.class);
+
+        query.orderBy(builder.asc(root.get(columnName)));
+
+        return manager.createQuery(query).getResultList();
+
+    }
+
+    public int count() {
+        return manager.createQuery("select count (d) from Doctor d", Number.class)
+                .getSingleResult().intValue();
+    }
+
+    @Override
+    @SneakyThrows
+    public void delete(Doctor doctor) {
+        manager.getTransaction().begin();
+
+        try {
+            manager.remove(doctor);
+            manager.getTransaction().commit();
+        }
+        catch (Exception e) {
+            manager.getTransaction().rollback();
+            throw e;
+        }
+    }
+
+
+
+
+
+
+
+
     public void loginDoctor(Doctor doctor) {
         Database.getDatabase().insert(doctor);
     }
@@ -38,21 +146,8 @@ public class DoctorDaoImpl implements DoctorDao {
         Database.getDatabase().logOutDoctor(doctor);
     }
 
-    @Override
-    public void update(Doctor doctor, String password) {
 
-        doctor.setPassword(password);
-    }
 
-    @Override
-    @SneakyThrows
-    public void delete(Doctor doctor) {
-        if (!Database.getDatabase().containsDoctor(doctor.getLogin())) {
-            throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
-        }
-        String token = getDoctorsToken(doctor);
-        Database.getDatabase().getDoctors().remove(token);
-    }
 
     @Override
     @SneakyThrows
@@ -86,12 +181,5 @@ public class DoctorDaoImpl implements DoctorDao {
         }
         return null;
     }
-    public static Doctor getDoctorByLogin(String login) {
-        for (Doctor doctor : getDatabase().getDoctors().values()) {
-            if (doctor.getLogin().equals(login)) {
-                return doctor;
-            }
-        }
-        return null;
-    }
+
 }

@@ -9,10 +9,16 @@ import ru.levelp.hospital.exception.ServerErrorCode;
 import ru.levelp.hospital.exception.ServerException;
 import ru.levelp.hospital.model.Doctor;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 
 public class DoctorService extends UserService {
+    private EntityManagerFactory factory = Persistence.createEntityManagerFactory("TestPersistenceUnit");
+    private EntityManager manager = factory.createEntityManager();
     static ObjectMapper objectMapper = new ObjectMapper();
-    DoctorDaoImpl doctorDao = new DoctorDaoImpl();
+    DoctorDaoImpl doctorDao = new DoctorDaoImpl(manager);
 
     @SneakyThrows
     public String registerDoctor(String requestJsonString) {
@@ -29,13 +35,11 @@ public class DoctorService extends UserService {
     }
 
 
-
-
     @SneakyThrows
     @Override
     public String logIn(String requestJsonString) {
         Doctor doctor = objectMapper.readValue(requestJsonString, Doctor.class);
-        if (DoctorDaoImpl.getDoctorByLogin(doctor.getLogin()) == null) {
+        if (doctorDao.getDoctorByLogin(doctor.getLogin()) == null) {
             throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
         }
         doctorDao.loginDoctor(doctor);
@@ -46,7 +50,7 @@ public class DoctorService extends UserService {
     @Override
     public void logOut(String requestJsonString) {
         Doctor doctor = objectMapper.readValue(requestJsonString, Doctor.class);
-        if (DoctorDaoImpl.getDoctorByLogin(doctor.getLogin()) == null) {
+        if (doctorDao.getDoctorByLogin(doctor.getLogin()) == null) {
             throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
         }
         doctorDao.logOutDoctor(doctor);

@@ -34,7 +34,7 @@ public class Doctor  {
         @Column(nullable = false, length = 100)
         public String speciality;
 
-        @OneToMany(mappedBy = "doctor")
+        @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
         public List<Patient> patients;
 
 
