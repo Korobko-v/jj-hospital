@@ -3,6 +3,12 @@ package ru.levelp.hospital.daoimpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ru.levelp.hospital.TestConfig;
 import ru.levelp.hospital.model.Doctor;
 import ru.levelp.hospital.model.Patient;
 
@@ -18,28 +24,18 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class PatientDaoImplTest {
+    @Autowired
     private EntityManagerFactory factory;
+
+    @Autowired
     private EntityManager manager;
+
+    @Autowired
     private PatientDaoImpl patients;
-
-    @BeforeEach
-    void setUp() {
-        factory = Persistence.createEntityManagerFactory("TestPersistenceUnit");
-        manager = factory.createEntityManager();
-        patients = new PatientDaoImpl(manager);
-    }
-
-    @AfterEach
-    void tearDown() {
-        if (manager != null) {
-            manager.close();
-        }
-
-        if (factory != null) {
-            factory.close();
-        }
-    }
 
     @Test
     void create() {

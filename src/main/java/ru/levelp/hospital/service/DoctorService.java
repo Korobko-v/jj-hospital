@@ -1,7 +1,10 @@
 package ru.levelp.hospital.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.levelp.hospital.daoimpl.DoctorDaoImpl;
 import ru.levelp.hospital.dto.request.RegisterDoctorDtoRequest;
 import ru.levelp.hospital.dto.response.RegisterDoctorDtoResponse;
@@ -11,14 +14,14 @@ import ru.levelp.hospital.model.Doctor;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
-
+@Service
+@Getter
 public class DoctorService extends UserService {
-    private EntityManagerFactory factory = Persistence.createEntityManagerFactory("TestPersistenceUnit");
-    private EntityManager manager = factory.createEntityManager();
+
     static ObjectMapper objectMapper = new ObjectMapper();
-    DoctorDaoImpl doctorDao = new DoctorDaoImpl(manager);
+    @Autowired
+    private DoctorDaoImpl doctors;
 
     @SneakyThrows
     public String registerDoctor(String requestJsonString) {
@@ -26,8 +29,7 @@ public class DoctorService extends UserService {
         RegisterDoctorDtoRequest registerDoctorDtoRequest = objectMapper.readValue(requestJsonString, RegisterDoctorDtoRequest.class);
         Doctor doctor = registerDoctorDtoRequest.validate();
 
-        doctorDao.insert(doctor);
-
+        doctors.insert(doctor);
         RegisterDoctorDtoResponse response = new RegisterDoctorDtoResponse();
         response.getRegisteredDoctorsToken(doctor);
 
@@ -39,10 +41,10 @@ public class DoctorService extends UserService {
     @Override
     public String logIn(String requestJsonString) {
         Doctor doctor = objectMapper.readValue(requestJsonString, Doctor.class);
-        if (doctorDao.getDoctorByLogin(doctor.getLogin()) == null) {
+        if (doctors.getDoctorByLogin(doctor.getLogin()) == null) {
             throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
         }
-        doctorDao.loginDoctor(doctor);
+        doctors.loginDoctor(doctor);
         return DoctorDaoImpl.getDoctorsToken(doctor);
     }
 
@@ -50,9 +52,9 @@ public class DoctorService extends UserService {
     @Override
     public void logOut(String requestJsonString) {
         Doctor doctor = objectMapper.readValue(requestJsonString, Doctor.class);
-        if (doctorDao.getDoctorByLogin(doctor.getLogin()) == null) {
+        if (doctors.getDoctorByLogin(doctor.getLogin()) == null) {
             throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
         }
-        doctorDao.logOutDoctor(doctor);
+        doctors.logOutDoctor(doctor);
     }
 }

@@ -1,5 +1,7 @@
 package ru.levelp.hospital.daoimpl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.levelp.hospital.dao.PatientsDao;
 import ru.levelp.hospital.model.Patient;
 
@@ -10,12 +12,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+@Repository()
 public class PatientDaoImpl implements PatientsDao {
-    private final EntityManager manager;
+    @Autowired
+    private EntityManager manager;
 
-    public PatientDaoImpl(EntityManager manager) {
-        this.manager = manager;
-    }
     @Override
     public Patient create(Patient patient) {
         manager.getTransaction().begin();

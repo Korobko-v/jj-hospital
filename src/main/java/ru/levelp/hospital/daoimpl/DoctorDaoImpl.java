@@ -1,7 +1,12 @@
 package ru.levelp.hospital.daoimpl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import ru.levelp.hospital.dao.DoctorDao;
 import ru.levelp.hospital.database.Database;
 import ru.levelp.hospital.exception.ServerErrorCode;
@@ -20,14 +25,16 @@ import java.util.List;
 import java.util.Map;
 
 
+@Repository
+@NoArgsConstructor
 public class DoctorDaoImpl implements DoctorDao {
 
-    static ObjectMapper mapper = new ObjectMapper();
-    private final EntityManager manager;
 
-    public DoctorDaoImpl(EntityManager manager) {
-        this.manager = manager;
-    }
+    @Autowired
+    static ObjectMapper mapper;
+
+    @Autowired
+    private EntityManager manager;
 
     @Override
     @SneakyThrows

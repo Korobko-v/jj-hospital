@@ -2,10 +2,12 @@ package ru.levelp.hospital.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.springframework.stereotype.Service;
 import ru.levelp.hospital.model.User;
 
 import java.util.UUID;
 
+@Service
 public class UserService {
     ObjectMapper mapper = new ObjectMapper();
 
