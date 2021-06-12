@@ -3,7 +3,7 @@ package ru.levelp.hospital.dto.response;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import ru.levelp.hospital.daoimpl.DoctorDaoImpl;
+import ru.levelp.hospital.database.Database;
 import ru.levelp.hospital.model.Doctor;
 
 @Getter
@@ -13,6 +13,6 @@ public class RegisterDoctorDtoResponse {
 
     @SneakyThrows
     public void getRegisteredDoctorsToken(Doctor doctor) {
-        this.token = DoctorDaoImpl.getDoctorsToken(doctor);
+        this.token = Database.getDoctorsToken(doctor);
     }
 }

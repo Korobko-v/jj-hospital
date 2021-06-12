@@ -3,6 +3,7 @@ package ru.levelp.hospital.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.*;

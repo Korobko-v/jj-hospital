@@ -1,6 +1,6 @@
 package ru.levelp.hospital.daoimpl;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -8,30 +8,27 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.levelp.hospital.TestConfig;
 import ru.levelp.hospital.model.Doctor;
-import ru.levelp.hospital.service.DoctorService;
 
 import javax.persistence.EntityManager;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class DoctorDaoImplTest {
+public class DoctorDaoTest {
+
 
     @Autowired
-    private EntityManager manager;
+    public EntityManager manager;
     @Autowired
-    private DoctorDaoImpl doctors;
+    public DoctorDao doctors;
 
 
     @Test
-    void insert() {
+    public void insert() {
         Doctor createdDoctor = doctors.insert(new Doctor("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "Surgeon"));
         assertNotNull(createdDoctor);
 
@@ -42,13 +39,13 @@ class DoctorDaoImplTest {
 
 
     @Test
-    void getDoctorByLoginExisting() {
+    public void getDoctorByLoginExisting() {
         Doctor createdDoctor = doctors.insert(new Doctor("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "Surgeon"));
         assertEquals(createdDoctor, doctors.getDoctorByLogin("iviv"));
     }
 
     @Test
-    void getDoctorByLoginNotExisting() {
+    public void getDoctorByLoginNotExisting() {
         assertNull(doctors.getDoctorByLogin("ivivv"));
     }
 
@@ -98,7 +95,7 @@ class DoctorDaoImplTest {
 
 
     @Test
-    void delete() {
+    public void delete() {
         Doctor createdDoctor = doctors.insert(new Doctor("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "Surgeon"));
         assertNotNull(createdDoctor);
 

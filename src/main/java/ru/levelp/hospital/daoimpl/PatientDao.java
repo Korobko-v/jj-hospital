@@ -2,7 +2,6 @@ package ru.levelp.hospital.daoimpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.levelp.hospital.dao.PatientsDao;
 import ru.levelp.hospital.model.Patient;
 
 import javax.persistence.EntityManager;
@@ -13,11 +12,10 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository()
-public class PatientDaoImpl implements PatientsDao {
+public class PatientDao {
     @Autowired
     private EntityManager manager;
 
-    @Override
     public Patient create(Patient patient) {
         manager.getTransaction().begin();
 
@@ -32,12 +30,10 @@ public class PatientDaoImpl implements PatientsDao {
         return patient;
     }
 
-    @Override
     public Patient findById(int id) {
         return manager.find(Patient.class, id);
     }
 
-    @Override
     public Patient findByLogin(String login) {
         try {
             return manager.createQuery("select p from Patient p where p.login =:login_to_search", Patient.class)
@@ -48,7 +44,6 @@ public class PatientDaoImpl implements PatientsDao {
         }
     }
 
-    @Override
     public Patient findByLoginAndPassword(String login, String password) {
         try {
             return manager.createQuery("select p from Patient p where p.login =:login_to_search " +
@@ -61,14 +56,12 @@ public class PatientDaoImpl implements PatientsDao {
         }
     }
 
-    @Override
     public List<Patient> findByDoctorsLogin(String doctorsLogin) {
         return manager.createQuery("select p from Patient p where p.doctor.login =:login", Patient.class)
                 .setParameter("login", doctorsLogin)
                 .getResultList();
     }
 
-    @Override
     public List<Patient> findAllSortedBy(String columnName) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
 
@@ -80,13 +73,11 @@ public class PatientDaoImpl implements PatientsDao {
         return manager.createQuery(query).getResultList();
     }
 
-    @Override
     public int count() {
         return manager.createQuery("select count (p) from Patient p", Number.class)
                 .getSingleResult().intValue();
     }
 
-    @Override
     public void delete(Patient patient) {
         manager.getTransaction().begin();
 

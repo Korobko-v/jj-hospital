@@ -1,8 +1,6 @@
 package ru.levelp.hospital.daoimpl;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -14,20 +12,16 @@ import ru.levelp.hospital.model.Patient;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class PatientDaoImplTest {
+public class PatientDaoTest {
     @Autowired
     private EntityManagerFactory factory;
 
@@ -35,10 +29,10 @@ class PatientDaoImplTest {
     private EntityManager manager;
 
     @Autowired
-    private PatientDaoImpl patients;
+    private PatientDao patients;
 
     @Test
-    void create() {
+    public void create() {
         Patient createdPatient = patients.create(new Patient("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "dgsgsd"));
         assertNotNull(createdPatient);
 
@@ -49,25 +43,25 @@ class PatientDaoImplTest {
 
 
     @Test
-    void findByLoginExisting() {
+    public void findByLoginExisting() {
         Patient createdPatient = patients.create(new Patient("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "dgsgsd"));
         assertEquals(createdPatient, patients.findByLogin(createdPatient.getLogin()));
     }
 
     @Test
-    void findByLoginNotExisting() {
+    public void findByLoginNotExisting() {
         assertNull(patients.findByLogin("this login doesn't exist"));
     }
 
     @Test
-    void findByLoginAndPassword() {
+    public void findByLoginAndPassword() {
         Patient createdPatient = patients.create(new Patient("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "dgsgsd"));
         assertEquals(createdPatient, patients.findByLoginAndPassword(createdPatient.getLogin(), createdPatient.getPassword()));
         assertNull(patients.findByLoginAndPassword("kkkkkkkkk", "kkkkkkkkkkkk"));
     }
 
     @Test
-    void findByDoctorsLogin() {
+    public void findByDoctorsLogin() {
         Patient patient = new Patient("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "dgsgsd");
         Doctor doctor = new Doctor("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "Surgeon");
 
@@ -82,7 +76,7 @@ class PatientDaoImplTest {
     }
 
     @Test
-    void findAllSortedBy() {
+    public void findAllSortedBy() {
         Patient first = patients.create(new Patient("aaa", "aaa", "aaa", "bbbbAA2", "aaa"));
         Patient second = patients.create(new Patient("bbb", "bbb", "bbb", "abbbVA2", "bbvxbx"));
 
@@ -102,7 +96,7 @@ class PatientDaoImplTest {
     }
 
     @Test
-    void testCount() {
+    public void testCount() {
         assertEquals(0, patients.count());
 
         patients.create(new Patient("aaa", "aaa", "aaa", "aaaAA2", "aaa"));
@@ -110,7 +104,7 @@ class PatientDaoImplTest {
     }
 
     @Test
-    void testDelete() {
+    public void testDelete() {
         Patient patient = patients.create(new Patient("aaa", "aaa", "aaa", "aaaAA2", "aaa"));
         assertNotNull(patients.findByLogin(patient.getLogin()));
         patients.delete(patient);

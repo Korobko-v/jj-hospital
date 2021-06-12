@@ -4,11 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import ru.levelp.hospital.daoimpl.DoctorDaoImpl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 @Configuration
 @ComponentScan(basePackages = "ru.levelp.hospital")

@@ -1,13 +1,8 @@
 package ru.levelp.hospital.daoimpl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import ru.levelp.hospital.dao.DoctorDao;
 import ru.levelp.hospital.database.Database;
 import ru.levelp.hospital.exception.ServerErrorCode;
 import ru.levelp.hospital.exception.ServerException;
@@ -17,26 +12,20 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.List;
-import java.util.Map;
 
 
 @Repository
-@NoArgsConstructor
-public class DoctorDaoImpl implements DoctorDao {
+public class DoctorDao {
 
+    public DoctorDao() {
 
-    @Autowired
-    static ObjectMapper mapper;
+    }
 
     @Autowired
     private EntityManager manager;
 
-    @Override
+
     @SneakyThrows
     public Doctor insert(Doctor doctor) {
         manager.getTransaction().begin();
@@ -119,7 +108,7 @@ public class DoctorDaoImpl implements DoctorDao {
                 .getSingleResult().intValue();
     }
 
-    @Override
+
     @SneakyThrows
     public void delete(Doctor doctor) {
         manager.getTransaction().begin();
@@ -156,37 +145,6 @@ public class DoctorDaoImpl implements DoctorDao {
 
 
 
-    @Override
-    @SneakyThrows
-    public void loadDatabase(String savedDataFileName) {
-        BufferedReader bufferedFileReader = new BufferedReader(new FileReader(savedDataFileName));
-        while (bufferedFileReader.ready()) {
-            String s = bufferedFileReader.readLine();
-            Database.setDatabase(mapper.readValue(s, Database.class));
-        }
-        bufferedFileReader.close();
-    }
 
-    @Override
-    @SneakyThrows
-    public void saveDatabase(String savedDataFileName) {
-        BufferedWriter bufferedFileWriter = new BufferedWriter(new FileWriter(savedDataFileName));
-        for (Doctor doctor : Database.getDatabase().getDoctors().values()) {
-            Database.getDatabase().getDoctors().put("empty token", doctor);
-        }
-        bufferedFileWriter.write(mapper.writeValueAsString(Database.getDatabase()));
-        bufferedFileWriter.close();
-    }
-
-    public static String getDoctorsToken(Doctor doctor) {
-        for (Map.Entry<String, Doctor> entry : Database.getDatabase().getDoctors().entrySet()) {
-            String key = entry.getKey();
-            Doctor value = entry.getValue();
-            if (value.getLogin().equals(doctor.getLogin())) {
-                return key;
-            }
-        }
-        return null;
-    }
 
 }
