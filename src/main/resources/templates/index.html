@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<p>
+    <a href="/register">Регистрация</a>
+    <a href="/doctors/generate">Наши врачи</a>
+</p>
+
+<table>
+    <tbody th:if="${not #lists.isEmpty(randomDoctors)}">
+    <th:block th:each="doc : ${randomDoctors}">
+        <tr>
+            <td th:text="${doc.firstName}"></td>
+            <td th:text="${doc.lastName}"></td>
+            <td th:text="${doc.speciality}"></td>
+        </tr>
+    </th:block>
+    </tbody>
+    <tbody th:if="${#lists.isEmpty(randomDoctors)}">
+    <tr>
+        <td>No doctors found.</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

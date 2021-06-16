@@ -5,6 +5,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
+          <factory-entry name="ProdPersistenceUnit" />
           <factory-entry name="TestPersistenceUnit" value="5aff7131-e786-4176-89bc-69de602f575d" />
         </datasource-mapping>
         <naming-strategy-map />
