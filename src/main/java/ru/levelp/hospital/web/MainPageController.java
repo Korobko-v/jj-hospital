@@ -25,10 +25,6 @@ public class MainPageController {
         return "index";
     }
 
-    @GetMapping("/register")
-    public String register() {
-        return "register";
-    }
 
     @ModelAttribute("doctorSession")
     public DoctorSession createDoctorSession() {
