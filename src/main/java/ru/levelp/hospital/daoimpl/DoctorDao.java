@@ -119,7 +119,7 @@ public class DoctorDao {
         }
     }
 
-    public List<Doctor> findRandomList(int count) {
+    public List<Doctor> findRandomList() {
         return manager.createQuery(
                 "from Doctor",
                 Doctor.class

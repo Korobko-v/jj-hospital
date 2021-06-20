@@ -17,8 +17,8 @@ public class MainPageController {
     private DoctorDao doctors;
 
     @GetMapping
-    public String index(Model model, @RequestParam(required = false, defaultValue = "10") int count) {
-        List<Doctor> randomDoctors = doctors.findRandomList(count);
+    public String index(Model model) {
+        List<Doctor> randomDoctors = doctors.findRandomList();
 
         model.addAttribute("randomDoctors", randomDoctors);
 
