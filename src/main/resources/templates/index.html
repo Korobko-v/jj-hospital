@@ -3,8 +3,11 @@
 <body>
 
 <p>
-    <a href="/register">Регистрация</a>
-    <a href="/login">Вход</a>
+    <span th:if="${doctorSession.loggedIn}"
+          th:text="'Здравствуйте, ' + ${doctorSession.login}"></span>
+    <a href="/logout" th:if="${doctorSession.loggedIn}">Выход</a>
+    <a href="/login" th:if="${not doctorSession.loggedIn}">Вход</a>
+    <a href="/register" th:if="${not doctorSession.loggedIn}">Регистрация</a>
     <a href="/showDoctors">Наши врачи</a>
 </p>
 

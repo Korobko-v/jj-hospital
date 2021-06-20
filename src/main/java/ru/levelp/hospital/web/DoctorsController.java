@@ -10,7 +10,6 @@ import ru.levelp.hospital.model.Doctor;
 import java.util.List;
 
 @Controller
-@RequestMapping(path = "/")
 @SessionAttributes("doctorSession")
 public class DoctorsController {
     @Autowired
@@ -52,7 +51,13 @@ public class DoctorsController {
             return "redirect:/";
         }
 
-        return "login";
+        return "redirect:/login";
+    }
+
+    @GetMapping("/logout")
+    public String handleLogout(DoctorSession doctorSession) {
+        doctorSession.clear();
+        return "redirect:/";
     }
 
 }
