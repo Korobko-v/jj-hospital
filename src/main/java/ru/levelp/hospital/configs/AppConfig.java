@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import ru.levelp.hospital.daoimpl.DoctorDao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,6 +16,7 @@ public class AppConfig {
     public EntityManager entityManager(EntityManagerFactory factory) {
         return factory.createEntityManager();
 }
+
 //    @Bean
 //    public EntityManagerFactory factory() {
 //        return Persistence.createEntityManagerFactory("TestPersistenceUnit");

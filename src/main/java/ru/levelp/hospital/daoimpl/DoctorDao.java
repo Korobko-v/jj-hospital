@@ -18,10 +18,6 @@ import java.util.List;
 @Repository
 public class DoctorDao {
 
-    public DoctorDao() {
-
-    }
-
     @Autowired
     private EntityManager manager;
 
