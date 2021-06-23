@@ -37,18 +37,18 @@ public class RegisterDoctorDtoRequest {
     @SneakyThrows
     public Doctor validate() {
         ObjectMapper mapper = new ObjectMapper();
-        if (this.getLogin() == null || this.getFirstName() == null || this.getLastName() == null
-                || this.getSpeciality() == null || this.getPassword() == null || this.getPatients() == null) {
+        if (getLogin() == null || getFirstName() == null || getLastName() == null
+                || getSpeciality() == null || getPassword() == null || getPatients() == null) {
             throw new ServerException(ServerErrorCode.NULL_FIELD);
         }
-        if (this.getLogin().isEmpty() || this.getFirstName().isEmpty() || this.getLastName().isEmpty()
-                || this.getSpeciality().isEmpty() || this.getPassword().isEmpty()) {
+        if (getLogin().isEmpty() || getFirstName().isEmpty() || getLastName().isEmpty()
+                || getSpeciality().isEmpty() || getPassword().isEmpty()) {
             throw new ServerException(ServerErrorCode.EMPTY_FIELD);
         }
-        if (this.getPassword().length() < 4) {
+        if (getPassword().length() < 4) {
             throw new ServerException(ServerErrorCode.SHORT_PASSWORD);
         }
-        if (!this.getPassword().matches(".*[a-z]+.*") ||!this.getPassword().matches(".*[A-Z\\W\\d]+.*")) {
+        if (!getPassword().matches(".*[a-z]+.*") ||!this.getPassword().matches(".*[A-Z\\W\\d]+.*")) {
             throw new ServerException(ServerErrorCode.WRONG_PASSWORD);
         }
 

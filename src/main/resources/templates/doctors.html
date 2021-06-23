@@ -2,8 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <h3>Наши врачи</h3>
+  <title>Наши врачи</title>
 </head>
 <body>
+<style>
+  body {
+    color: snow;
+    font-size: x-large;
+    position: absolute;
+    left: 70%;
+    background:white url("https://w-dog.ru/wallpapers/14/0/325944593045745.jpg") no-repeat;
+    background-size: 100%;
+    backface-visibility: inherit;
+    z-index: 1;
+    opacity: 1;
+  }
+</style>
 <table>
   <tbody th:if="${not #lists.isEmpty(doctorsList)}">
   <th:block th:each="doc : ${doctorsList}">

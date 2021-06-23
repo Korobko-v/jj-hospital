@@ -1,7 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<body>
+<head>
+    <meta charset="utf-8">
+    <title>Главная страница|Госпиталь</title>
 
+</head>
+<body>
+<style>
+    body {
+        color: snow;
+        font-size: x-large;
+        position: absolute;
+        tab-interval: 30px;
+        left: 70%;
+        background:white url("https://w-dog.ru/wallpapers/14/0/325944593045745.jpg") no-repeat;
+        background-size: 100%;
+        backface-visibility: inherit;
+        z-index: 1;
+        opacity: 1;
+    }
+</style>
 <p>
     <span th:if="${doctorSession.loggedIn}"
           th:text="'Здравствуйте, ' + ${doctorSession.login}"></span>
@@ -11,21 +29,26 @@
     <a href="/showDoctors">Наши врачи</a>
 </p>
 
-<table>
-    <tbody th:if="${not #lists.isEmpty(randomDoctors)}">
-    <th:block th:each="doc : ${randomDoctors}">
+
+
+    <table>
+        <tbody th:if="${not #lists.isEmpty(randomDoctors)}">
+        <th:block th:each="doc : ${randomDoctors}">
+            <tr>
+                <td th:text="${doc.firstName}"></td>
+                <td th:text="${doc.lastName}"></td>
+                <td th:text="${doc.speciality}"></td>
+                <td th:text="${doc.login}"></td>
+            </tr>
+        </th:block>
+        </tbody>
+        <tbody th:if="${#lists.isEmpty(randomDoctors)}">
         <tr>
-            <td th:text="${doc.firstName}"></td>
-            <td th:text="${doc.lastName}"></td>
-            <td th:text="${doc.speciality}"></td>
+            <td>No doctors found.</td>
         </tr>
-    </th:block>
-    </tbody>
-    <tbody th:if="${#lists.isEmpty(randomDoctors)}">
-    <tr>
-        <td>No doctors found.</td>
-    </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+
 </body>
 </html>
