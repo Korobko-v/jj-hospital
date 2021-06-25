@@ -40,8 +40,22 @@ public class DoctorsController {
         if (result.hasErrors()) {
             return "/register";
         }
-        doctors.insert(new Doctor(form.getFirstName(), form.getLastName(),
-                form.getLogin(), form.getPassword(), form.getSpeciality()));
+        try {
+            doctors.insert(new Doctor(form.getFirstName(), form.getLastName(),
+                    form.getLogin(), form.getPassword(), form.getSpeciality()));
+        }
+        catch (Exception cause) {
+            result.addError(new FieldError(
+                    "form",
+                    "login",
+                    "Пользователь с таким логином уже существует"
+            ));
+        }
+
+        if (result.hasErrors()) {
+            return "register";
+        }
+
         return "redirect:/";
     }
 

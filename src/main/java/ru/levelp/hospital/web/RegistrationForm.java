@@ -18,7 +18,7 @@ public class RegistrationForm {
     private String lastName;
 
     @Size(min = 4, max = 10)
-    @Pattern(regexp = "[a-zA-Z0-9_\\.-]{4,10}", message = "Login should consist of letters, digits, underscore, dot or hyphen")
+    @Pattern(regexp = "[a-zA-Z0-9_\\.-]*", message = "Login should consist of letters, digits, underscore, dot or hyphen")
     private String login;
 
     @Size(min = 4, max = 10)

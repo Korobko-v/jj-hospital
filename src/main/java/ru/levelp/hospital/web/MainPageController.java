@@ -21,7 +21,6 @@ public class MainPageController {
         List<Doctor> randomDoctors = doctors.findRandomList();
 
         model.addAttribute("randomDoctors", randomDoctors);
-
         return "index";
     }
 
