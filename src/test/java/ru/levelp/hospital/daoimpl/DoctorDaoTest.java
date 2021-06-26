@@ -32,27 +32,27 @@ public class DoctorDaoTest {
         assertNotNull(createdDoctor);
 
         assertEquals(createdDoctor, manager.find(Doctor.class, createdDoctor.getId()));
-        assertEquals(createdDoctor, doctors.getDoctorByLogin(createdDoctor.getLogin()));
-        assertNull(doctors.getDoctorById(55594));
+        assertEquals(createdDoctor, doctors.findByLogin(createdDoctor.getLogin()));
+        assertNull(doctors.findById(55594));
     }
 
 
     @Test
     public void getDoctorByLoginExisting() {
         Doctor createdDoctor = doctors.insert(new Doctor("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "Surgeon"));
-        assertEquals(createdDoctor, doctors.getDoctorByLogin("iviv"));
+        assertEquals(createdDoctor, doctors.findByLogin("iviv"));
     }
 
     @Test
     public void getDoctorByLoginNotExisting() {
-        assertNull(doctors.getDoctorByLogin("ivivv"));
+        assertNull(doctors.findByLogin("ivivv"));
     }
 
     @Test
     public void getDoctorByLoginAndPassword() {
         Doctor createdDoctor = doctors.insert(new Doctor("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "Surgeon"));
-        assertEquals(createdDoctor, doctors.getDoctorByLoginAndPassword("iviv", "fdsfGSDG12"));
-        assertNull(doctors.getDoctorByLoginAndPassword("login8", "pass3"));
+        assertEquals(createdDoctor, doctors.findByLoginAndPassword("iviv", "fdsfGSDG12"));
+        assertNull(doctors.findByLoginAndPassword("login8", "pass3"));
     }
 
     @Test
@@ -99,6 +99,6 @@ public class DoctorDaoTest {
         assertNotNull(createdDoctor);
 
         doctors.delete(createdDoctor);
-        assertNull(doctors.getDoctorByLogin(createdDoctor.getLogin()));
+        assertNull(doctors.findByLogin(createdDoctor.getLogin()));
     }
 }

@@ -3,6 +3,7 @@ package ru.levelp.hospital.daoimpl;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.levelp.hospital.database.Database;
 import ru.levelp.hospital.exception.ServerErrorCode;
 import ru.levelp.hospital.exception.ServerException;
@@ -23,27 +24,19 @@ public class DoctorDao {
 
 
     @SneakyThrows
+    @Transactional
     public Doctor insert(Doctor doctor) {
-        manager.getTransaction().begin();
-
-        try {
             manager.persist(doctor);
-            manager.getTransaction().commit();
-        }
-        catch (Exception e) {
-            manager.getTransaction().rollback();
-            throw e;
-        }
         return doctor;
     }
 
 
-    public Doctor getDoctorById(int id) {
+    public Doctor findById(int id) {
         return manager.find(Doctor.class, id);
     }
 
 
-    public Doctor getDoctorByLogin(String login) {
+    public Doctor findByLogin(String login) {
         try {
             return manager.createQuery("select d from Doctor d where d.login =:login_to_search", Doctor.class)
                     .setParameter("login_to_search", login)
@@ -53,7 +46,7 @@ public class DoctorDao {
         }
     }
 
-    public Doctor getDoctorByLoginAndPassword(String login, String password) {
+    public Doctor findByLoginAndPassword(String login, String password) {
         try {
             return manager.createQuery("select d from Doctor d where d.login =:login_to_search " +
                     "and d.password =:pass", Doctor.class)

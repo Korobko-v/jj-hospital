@@ -2,7 +2,6 @@ package ru.levelp.hospital.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +9,6 @@ import ru.levelp.hospital.daoimpl.DoctorDao;
 import ru.levelp.hospital.model.Doctor;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @SessionAttributes("doctorSession")
@@ -72,7 +70,7 @@ public class DoctorsController {
 
             DoctorSession doctorSession
     ) {
-        Doctor doctor = doctors.getDoctorByLoginAndPassword(login, password);
+        Doctor doctor = doctors.findByLoginAndPassword(login, password);
         if (doctor != null) {
             doctorSession.setUserId(doctor.getId());
             doctorSession.setLogin(doctor.getLogin());

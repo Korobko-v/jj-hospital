@@ -41,7 +41,7 @@ public class DoctorService extends UserService {
     @Override
     public String logIn(String requestJsonString) {
         Doctor doctor = objectMapper.readValue(requestJsonString, Doctor.class);
-        if (doctors.getDoctorByLogin(doctor.getLogin()) == null) {
+        if (doctors.findByLogin(doctor.getLogin()) == null) {
             throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
         }
         doctors.loginDoctor(doctor);
@@ -52,7 +52,7 @@ public class DoctorService extends UserService {
     @Override
     public void logOut(String requestJsonString) {
         Doctor doctor = objectMapper.readValue(requestJsonString, Doctor.class);
-        if (doctors.getDoctorByLogin(doctor.getLogin()) == null) {
+        if (doctors.findByLogin(doctor.getLogin()) == null) {
             throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
         }
         doctors.logOutDoctor(doctor);

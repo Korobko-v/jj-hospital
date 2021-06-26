@@ -34,7 +34,7 @@ public class LoginControllerTest {
         Doctor doctor = new Doctor("1", "1", "1", "123", "1");
         doctor.setId(1);
 
-        when(doctors.getDoctorByLoginAndPassword("1", "123"))
+        when(doctors.findByLoginAndPassword("1", "123"))
                 .thenReturn(doctor);
 
         mvc.perform(post("/login")
