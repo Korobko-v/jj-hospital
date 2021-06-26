@@ -2,21 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Главная страница|Госпиталь</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/5.0.1/css/bootstrap.css">
 </head>
 
 <body>
 <p>
     <span th:if="${doctorSession.loggedIn}"
           th:text="'Здравствуйте, ' + ${doctorSession.login}"></span>
-    <a href="/logout" th:if="${doctorSession.loggedIn}">Выход</a>
-    <a href="/login" th:if="${not doctorSession.loggedIn}">Вход</a>
-    <a href="/register" th:if="${not doctorSession.loggedIn}">Регистрация</a>
-    <a href="/showDoctors">Наши врачи</a>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="/logout" th:if="${doctorSession.loggedIn}" class="btn btn-outline-danger me-md-2">Выход</a>
+    <a href="/login" th:if="${not doctorSession.loggedIn}" class="btn btn-outline-dark me-md-2">Вход</a>
+    <a href="/register" th:if="${not doctorSession.loggedIn}" class="btn btn-outline-dark">Регистрация</a>
+    </div>
+    <a href="/showDoctors" class="btn btn-outline-dark">Наши врачи</a>
 </p>
 
 
 
-    <table>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Имя</th>
+            <th scope="col">Фамилия</th>
+            <th scope="col">Специальность</th>
+            <th scope="col">Логин</th>
+        </tr>
+        </thead>
         <tbody th:if="${not #lists.isEmpty(randomDoctors)}">
         <th:block th:each="doc : ${randomDoctors}">
             <tr>

@@ -3,9 +3,19 @@
 <head>
   <h3>Наши врачи</h3>
   <title>Наши врачи</title>
+  <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/5.0.1/css/bootstrap.css">
+
+
 </head>
 <body>
-<table>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Имя</th>
+      <th scope="col">Фамилия</th>
+      <th scope="col">Специальность</th>
+    </tr>
+  </thead>
   <tbody th:if="${not #lists.isEmpty(doctorsList)}">
   <th:block th:each="doc : ${doctorsList}">
     <tr>
@@ -22,7 +32,7 @@
   </tbody>
 </table>
 <p>
-  <a href="/">На главную</a>
+  <a href="/" class="btn btn-dark btn-sm">На главную</a>
 </p>
 </body>
 </html>
