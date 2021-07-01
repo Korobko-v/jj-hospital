@@ -2,13 +2,18 @@ package ru.levelp.hospital.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.levelp.hospital.daoimpl.DoctorDao;
+import ru.levelp.hospital.daoimpl.PatientDao;
+import ru.levelp.hospital.daoimpl.PatientsCustomSort;
 import ru.levelp.hospital.model.Doctor;
+import ru.levelp.hospital.model.Patient;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @SessionAttributes("doctorSession")
@@ -16,6 +21,11 @@ public class DoctorsController {
     @Autowired
     private DoctorDao doctors;
 
+    @Autowired
+    private PatientsCustomSort sort;
+
+    @Autowired
+    private PatientDao patients;
 
     @GetMapping("/register")
     private String showRegisterForm(
@@ -85,6 +95,15 @@ public class DoctorsController {
     public String handleLogout(DoctorSession doctorSession) {
         doctorSession.clear();
         return "redirect:/";
+    }
+
+    @GetMapping("/showPatients")
+    public String showPatients(Model model) {
+
+        List<Patient> patientsList = sort.findAllSortedBy("login");
+        model.addAttribute("patientsList", patientsList);
+
+        return "patients";
     }
 
     @ModelAttribute("form")

@@ -51,5 +51,29 @@ public class Doctor  {
     }
 
 
+    @Override
+    public String toString() {
+        return "Doctor{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", speciality='" + speciality + '\'' +
+                ", patients=" + patients +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Doctor doctor = (Doctor) o;
+        return id == doctor.id && firstName.equals(doctor.firstName) && lastName.equals(doctor.lastName) && login.equals(doctor.login) && password.equals(doctor.password) && speciality.equals(doctor.speciality);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, login, password, speciality);
+    }
 }

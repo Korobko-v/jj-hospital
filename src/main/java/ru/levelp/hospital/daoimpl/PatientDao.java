@@ -1,7 +1,11 @@
 package ru.levelp.hospital.daoimpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.levelp.hospital.model.Patient;
 
 import javax.persistence.EntityManager;
@@ -12,82 +16,26 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
-public class PatientDao {
-    @Autowired
-    private EntityManager manager;
+public interface PatientDao extends JpaRepository<Patient, Integer> {
 
-    public Patient create(Patient patient) {
-        manager.getTransaction().begin();
-
-        try {
-            manager.persist(patient);
-            manager.getTransaction().commit();
-        }
-        catch (Exception e) {
-            manager.getTransaction().rollback();
-            throw e;
-        }
+    @Transactional
+    default Patient create(Patient patient) {
+        save(patient);
         return patient;
     }
 
-    public Patient findById(int id) {
-        return manager.find(Patient.class, id);
-    }
+    Patient findById(int id);
 
-    public Patient findByLogin(String login) {
-        try {
-            return manager.createQuery("select p from Patient p where p.login =:login_to_search", Patient.class)
-                    .setParameter("login_to_search", login)
-                    .getSingleResult();
-        } catch (NoResultException notFound) {
-            return null;
-        }
-    }
+    Patient findByLogin(String login);
 
-    public Patient findByLoginAndPassword(String login, String password) {
-        try {
-            return manager.createQuery("select p from Patient p where p.login =:login_to_search " +
-                    "and p.password =:pass", Patient.class)
-                    .setParameter("pass", password)
-                    .setParameter("login_to_search", login)
-                    .getSingleResult();
-        } catch (NoResultException notFound) {
-            return null;
-        }
-    }
+    Patient findByLoginAndPassword(String login, String password);
 
-    public List<Patient> findByDoctorsLogin(String doctorsLogin) {
-        return manager.createQuery("select p from Patient p where p.doctor.login =:login", Patient.class)
-                .setParameter("login", doctorsLogin)
-                .getResultList();
-    }
+    @Query("select p from Patient p where p.doctor.login =:login")
+    List<Patient> findByDoctorsLogin(@Param("login") String doctorsLogin);
 
-    public List<Patient> findAllSortedBy(String columnName) {
-        CriteriaBuilder builder = manager.getCriteriaBuilder();
 
-        CriteriaQuery<Patient> query = builder.createQuery(Patient.class);
-        Root<Patient> root = query.from(Patient.class);
 
-        query.orderBy(builder.asc(root.get(columnName)));
-
-        return manager.createQuery(query).getResultList();
-    }
-
-    public int count() {
-        return manager.createQuery("select count (p) from Patient p", Number.class)
-                .getSingleResult().intValue();
-    }
-
-    public void delete(Patient patient) {
-        manager.getTransaction().begin();
-
-        try {
-            manager.remove(patient);
-            manager.getTransaction().commit();
-        }
-        catch (Exception e) {
-            manager.getTransaction().rollback();
-            throw e;
-        }
+    default void delete(Patient patient) {
+        deleteById(patient.getId());
     }
 }

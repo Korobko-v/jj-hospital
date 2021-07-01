@@ -9,7 +9,7 @@ import javax.persistence.Persistence;
 @Configuration
 public class ProdJpaConfig {
     @Bean
-    public EntityManagerFactory factory() {
+    public EntityManagerFactory entityManagerFactory() {
         return Persistence.createEntityManagerFactory("ProdPersistenceUnit");
     }
 }

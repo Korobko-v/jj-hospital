@@ -46,9 +46,9 @@ class MainPageControllerTest {
 
         List<Doctor> expectedDoctors = List.of(doctor1, doctor3, doctor2);
 
-        when(doctors.findRandomList()).thenReturn(expectedDoctors);
-        when(doctors.findAllSortedBy("login")).thenReturn(List.of(doctor1, doctor2, doctor3));
-        when(doctors.count()).thenReturn(3);
+//        when(doctors.findRandomList()).thenReturn(expectedDoctors);
+//        when(doctors.findAllSortedBy("login")).thenReturn(List.of(doctor1, doctor2, doctor3));
+//        when(doctors.count()).thenReturn(3L);
 
         mvc.perform(get("/"))
                 .andExpect(status().isOk())

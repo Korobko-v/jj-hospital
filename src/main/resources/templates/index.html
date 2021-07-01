@@ -11,6 +11,7 @@
           th:text="'Здравствуйте, ' + ${doctorSession.login}"></span>
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <a href="/logout" th:if="${doctorSession.loggedIn}" class="btn btn-outline-danger me-md-2">Выход</a>
+    <a href="/showPatients" th:if="${doctorSession.loggedIn}" class="btn btn-outline-info me-md-2">Мои пациенты</a>
     <a href="/login" th:if="${not doctorSession.loggedIn}" class="btn btn-outline-dark me-md-2">Вход</a>
     <a href="/register" th:if="${not doctorSession.loggedIn}" class="btn btn-outline-dark">Регистрация</a>
     </div>

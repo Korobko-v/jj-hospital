@@ -17,44 +17,44 @@ import ru.levelp.hospital.model.Doctor;
 @Getter
 public class DoctorService extends UserService {
 
-    @Autowired
-    static ObjectMapper objectMapper;
-
-    @Autowired
-    private DoctorDao doctors;
-
-    @SneakyThrows
-    public String registerDoctor(String requestJsonString) {
-
-        RegisterDoctorDtoRequest registerDoctorDtoRequest = objectMapper.readValue(requestJsonString, RegisterDoctorDtoRequest.class);
-        Doctor doctor = registerDoctorDtoRequest.validate();
-
-        doctors.insert(doctor);
-        RegisterDoctorDtoResponse response = new RegisterDoctorDtoResponse();
-        response.getRegisteredDoctorsToken(doctor);
-
-        return response.getToken();
-    }
-
-
-    @SneakyThrows
-    @Override
-    public String logIn(String requestJsonString) {
-        Doctor doctor = objectMapper.readValue(requestJsonString, Doctor.class);
-        if (doctors.findByLogin(doctor.getLogin()) == null) {
-            throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
-        }
-        doctors.loginDoctor(doctor);
-        return Database.getDoctorsToken(doctor);
-    }
-
-    @SneakyThrows
-    @Override
-    public void logOut(String requestJsonString) {
-        Doctor doctor = objectMapper.readValue(requestJsonString, Doctor.class);
-        if (doctors.findByLogin(doctor.getLogin()) == null) {
-            throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
-        }
-        doctors.logOutDoctor(doctor);
-    }
+//    @Autowired
+//    static ObjectMapper objectMapper;
+//
+//    @Autowired
+//    private DoctorDao doctors;
+//
+//    @SneakyThrows
+//    public String registerDoctor(String requestJsonString) {
+//
+//        RegisterDoctorDtoRequest registerDoctorDtoRequest = objectMapper.readValue(requestJsonString, RegisterDoctorDtoRequest.class);
+//        Doctor doctor = registerDoctorDtoRequest.validate();
+//
+//        doctors.insert(doctor);
+//        RegisterDoctorDtoResponse response = new RegisterDoctorDtoResponse();
+//        response.getRegisteredDoctorsToken(doctor);
+//
+//        return response.getToken();
+//    }
+//
+//
+//    @SneakyThrows
+//    @Override
+//    public String logIn(String requestJsonString) {
+//        Doctor doctor = objectMapper.readValue(requestJsonString, Doctor.class);
+//        if (doctors.findByLogin(doctor.getLogin()) == null) {
+//            throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
+//        }
+//        doctors.loginDoctor(doctor);
+//        return Database.getDoctorsToken(doctor);
+//    }
+//
+//    @SneakyThrows
+//    @Override
+//    public void logOut(String requestJsonString) {
+//        Doctor doctor = objectMapper.readValue(requestJsonString, Doctor.class);
+//        if (doctors.findByLogin(doctor.getLogin()) == null) {
+//            throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
+//        }
+//        doctors.logOutDoctor(doctor);
+//    }
 }

@@ -1,6 +1,7 @@
 package ru.levelp.hospital.daoimpl;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -29,6 +30,12 @@ public class PatientDaoTest {
     @Autowired
     private PatientDao patients;
 
+    @Autowired
+    private DoctorDao doctors;
+
+    @Autowired
+    private PatientsCustomSort sort;
+
     @Test
     public void create() {
         Patient createdPatient = patients.create(new Patient("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "dgsgsd"));
@@ -38,6 +45,7 @@ public class PatientDaoTest {
         assertEquals(createdPatient, patients.findById(createdPatient.getId()));
         assertNull(patients.findById(55594));
     }
+
 
 
     @Test
@@ -62,12 +70,11 @@ public class PatientDaoTest {
     public void findByDoctorsLogin() {
         Patient patient = new Patient("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "dgsgsd");
         Doctor doctor = new Doctor("Ivan" , "Ivanov", "iviv", "fdsfGSDG12", "Surgeon");
-
-        manager.getTransaction().begin();
-        manager.persist(doctor);
-        manager.persist(patient);
         patient.setDoctor(doctor);
-        manager.getTransaction().commit();
+//        Mockito.when(patients.findByDoctorsLogin(doctor.getLogin())).thenReturn(Collections.singletonList(patient));
+
+        doctors.insert(doctor);
+
 
         assertEquals(Collections.singletonList(patient), patients.findByDoctorsLogin(doctor.getLogin()));
         assertEquals(Collections.emptyList(), patients.findByDoctorsLogin("unknown"));
@@ -78,11 +85,11 @@ public class PatientDaoTest {
         Patient first = patients.create(new Patient("aaa", "aaa", "aaa", "bbbbAA2", "aaa"));
         Patient second = patients.create(new Patient("bbb", "bbb", "bbb", "abbbVA2", "bbvxbx"));
 
-        assertEquals(Arrays.asList(first,second), patients.findAllSortedBy("login"));
-        assertEquals(Arrays.asList(second, first), patients.findAllSortedBy("password"));
+        assertEquals(Arrays.asList(first,second), sort.findAllSortedBy("login"));
+        assertEquals(Arrays.asList(second, first), sort.findAllSortedBy("password"));
 
         try {
-            patients.findAllSortedBy("---fd-d-afaf");
+            sort.findAllSortedBy("---fd-d-afaf");
             fail("Sorting by non-existing column");
         } catch (IllegalArgumentException e) {
         }
@@ -90,16 +97,9 @@ public class PatientDaoTest {
 
     @Test
     public void testSortedByWrongColumn() {
-        assertThrows(IllegalArgumentException.class,()-> patients.findAllSortedBy("-- wrong column name"));
+        assertThrows(IllegalArgumentException.class,()-> sort.findAllSortedBy("-- wrong column name"));
     }
 
-    @Test
-    public void testCount() {
-        assertEquals(0, patients.count());
-
-        patients.create(new Patient("aaa", "aaa", "aaa", "aaaAA2", "aaa"));
-        assertEquals(1, patients.count());
-    }
 
     @Test
     public void testDelete() {

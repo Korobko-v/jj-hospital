@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.levelp.hospital.daoimpl.DoctorDao;
+import ru.levelp.hospital.daoimpl.DoctorsCustomSort;
 import ru.levelp.hospital.model.Doctor;
 
 import java.util.List;
@@ -16,9 +17,12 @@ public class MainPageController {
     @Autowired
     private DoctorDao doctors;
 
+    @Autowired
+    private DoctorsCustomSort sort;
+
     @GetMapping
     public String index(Model model) {
-        List<Doctor> randomDoctors = doctors.findRandomList();
+        List<Doctor> randomDoctors = doctors.findAll();
 
         model.addAttribute("randomDoctors", randomDoctors);
         return "index";
@@ -32,10 +36,12 @@ public class MainPageController {
 
     @GetMapping("/showDoctors")
     public String showDoctors(Model model) {
-        List<Doctor> doctorsList = doctors.findAllSortedBy("login");
+        List<Doctor> doctorsList = sort.findAllSortedBy("login");
 
         model.addAttribute("doctorsList", doctorsList);
 
         return "doctors";
     }
+
+
 }

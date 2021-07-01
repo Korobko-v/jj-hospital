@@ -1,144 +1,57 @@
 package ru.levelp.hospital.daoimpl;
 
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.levelp.hospital.database.Database;
 import ru.levelp.hospital.exception.ServerErrorCode;
 import ru.levelp.hospital.exception.ServerException;
 import ru.levelp.hospital.model.Doctor;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 
 @Repository
-public class DoctorDao {
-
-    @Autowired
-    private EntityManager manager;
+public interface DoctorDao extends JpaRepository<Doctor, Integer> {
 
 
     @SneakyThrows
     @Transactional
-    public Doctor insert(Doctor doctor) {
-            manager.persist(doctor);
+    default Doctor insert(Doctor doctor) {
+            save(doctor);
         return doctor;
     }
 
 
-    public Doctor findById(int id) {
-        return manager.find(Doctor.class, id);
-    }
+    Doctor findByLogin(String login);
+
+    Doctor findByLoginAndPassword(String login, String password);
 
 
-    public Doctor findByLogin(String login) {
-        try {
-            return manager.createQuery("select d from Doctor d where d.login =:login_to_search", Doctor.class)
-                    .setParameter("login_to_search", login)
-                    .getSingleResult();
-        } catch (NoResultException notFound) {
-            return null;
-        }
-    }
-
-    public Doctor findByLoginAndPassword(String login, String password) {
-        try {
-            return manager.createQuery("select d from Doctor d where d.login =:login_to_search " +
-                    "and d.password =:pass", Doctor.class)
-                    .setParameter("pass", password)
-                    .setParameter("login_to_search", login)
-                    .getSingleResult();
-        } catch (NoResultException notFound) {
-            return null;
-        }
-    }
-
-    public Doctor updatePassword(String login, String newPass) {
-
-        try {
-//           String hql = "update Doctor d set d.password=:password where d.login =:login";
-//            Query query = manager.createQuery(hql).setParameter("password", newPass)
-//                    .setParameter("login", login);
-//            query.executeUpdate();
-//            return getDoctorByLogin(login);
-
-            Doctor toUpdate = manager.createQuery("select d from Doctor d where d.login =:login", Doctor.class)
-                    .setParameter("login", login)
-                    .getSingleResult();
-            delete(toUpdate);
-            toUpdate.setPassword(newPass);
-            insert(toUpdate);
-            return toUpdate;
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
-
-    public List<Doctor> findAllSortedBy(String columnName) {
-        CriteriaBuilder builder = manager.getCriteriaBuilder();
-
-        CriteriaQuery<Doctor> query = builder.createQuery(Doctor.class);
-        Root<Doctor> root = query.from(Doctor.class);
-
-        query.orderBy(builder.asc(root.get(columnName)));
-
-        return manager.createQuery(query).getResultList();
-
-    }
-
-    public int count() {
-        return manager.createQuery("select count (d) from Doctor d", Number.class)
-                .getSingleResult().intValue();
-    }
-
+    @Query("update Doctor d set d.password =: password where d.login=: login")
+    Doctor updatePassword(@Param("login") String login, @Param("password") String password);
 
     @SneakyThrows
-    public void delete(Doctor doctor) {
-        manager.getTransaction().begin();
-
-        try {
-            manager.remove(doctor);
-            manager.getTransaction().commit();
-        }
-        catch (Exception e) {
-            manager.getTransaction().rollback();
-            throw e;
-        }
-    }
-
-    public List<Doctor> findRandomList() {
-        return manager.createQuery(
-                "from Doctor",
-                Doctor.class
-        ).getResultList();
+    default void delete(Doctor doctor) {
+        deleteById(doctor.getId());
     }
 
 
+    List<Doctor> findAll();
 
 
-
-
-    public void loginDoctor(Doctor doctor) {
+    default void loginDoctor(Doctor doctor) {
         Database.getDatabase().insert(doctor);
     }
 
     @SneakyThrows
-    public void logOutDoctor(Doctor doctor) {
+    default void logOutDoctor(Doctor doctor) {
         if (!Database.getDatabase().containsDoctor(doctor.getLogin())) {
             throw new ServerException(ServerErrorCode.USER_DOESNT_EXIST);
         }
         Database.getDatabase().logOutDoctor(doctor);
     }
-
-
-
-
-
 
 }
