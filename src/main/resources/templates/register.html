@@ -6,7 +6,13 @@
     <script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="register.js"></script>
 </head>
-<body class="table table-striped">
+<body onload="loadDepartments()">
+<style>
+    body {
+        background: url("https://wallpaperaccess.com/full/1282794.jpg") no-repeat;
+        background-size: 100% 900%;
+    }
+</style>
 <h3>Регистрация</h3>
 
 <form method="post" action="/register" enctype="application/x-www-form-urlencoded"th:object="${form}">
@@ -49,6 +55,12 @@
             <input type="text" name="speciality">
         </label>
     </p>
+    <p>
+        <label>Department:
+            <select name="department"></select>
+        </label>
+    </p>
+    <div th:each="error : ${#fields.errors('passwordConfirmation')}" th:text="${error}" class="alert alert-danger" role="alert"></div>
     <p>
         <input type="submit" class="btn btn-outline-success">
     </p>

@@ -72,7 +72,7 @@ public class DoctorsController {
         return "login";
     }
 
-    @PostMapping("/login")
+
     public String handleLoginForm(
             @RequestParam String login,
             @RequestParam String password,

@@ -3,6 +3,7 @@ package ru.levelp.hospital.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -35,9 +36,15 @@ public class Doctor  {
         @Column(nullable = false, length = 100)
         public String speciality;
 
+        @Column
+        @ColumnDefault(value = "false")
+        private boolean isAdmin;
+
         @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
         public List<Patient> patients;
 
+        @ManyToOne
+        private Department department;
 
         public Doctor() {}
 

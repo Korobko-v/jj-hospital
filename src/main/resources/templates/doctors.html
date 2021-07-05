@@ -8,12 +8,19 @@
 
 </head>
 <body>
+<style>
+  body {
+    background: url("https://wallpaperaccess.com/full/1282794.jpg") no-repeat;
+    background-size: 100% 900%;
+  }
+</style>
 <table class="table table-striped">
   <thead>
     <tr>
       <th scope="col">Имя</th>
       <th scope="col">Фамилия</th>
       <th scope="col">Специальность</th>
+      <th scope="col">Логин</th>
     </tr>
   </thead>
   <tbody th:if="${not #lists.isEmpty(doctorsList)}">
@@ -22,6 +29,7 @@
       <td th:text="${doc.firstName}"></td>
       <td th:text="${doc.lastName}"></td>
       <td th:text="${doc.speciality}"></td>
+      <td th:text="${doc.login}"></td>
     </tr>
   </th:block>
   </tbody>

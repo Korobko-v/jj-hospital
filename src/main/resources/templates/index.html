@@ -6,6 +6,12 @@
 </head>
 
 <body>
+<style>
+    body {
+        background: url("https://wallpaperaccess.com/full/1282794.jpg") no-repeat;
+        background-size: 100% 900%;
+    }
+</style>
 <p>
     <span th:if="${doctorSession.loggedIn}"
           th:text="'Здравствуйте, ' + ${doctorSession.login}"></span>
@@ -16,36 +22,8 @@
     <a href="/register" th:if="${not doctorSession.loggedIn}" class="btn btn-outline-dark">Регистрация</a>
     </div>
     <a href="/showDoctors" class="btn btn-outline-dark">Наши врачи</a>
+    <a href="/api/departments/all" class="btn btn-outline-dark">Отделения</a>
 </p>
-
-
-
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Имя</th>
-            <th scope="col">Фамилия</th>
-            <th scope="col">Специальность</th>
-            <th scope="col">Логин</th>
-        </tr>
-        </thead>
-        <tbody th:if="${not #lists.isEmpty(randomDoctors)}">
-        <th:block th:each="doc : ${randomDoctors}">
-            <tr>
-                <td th:text="${doc.firstName}"></td>
-                <td th:text="${doc.lastName}"></td>
-                <td th:text="${doc.speciality}"></td>
-                <td th:text="${doc.login}"></td>
-            </tr>
-        </th:block>
-        </tbody>
-        <tbody th:if="${#lists.isEmpty(randomDoctors)}">
-        <tr>
-            <td>No doctors found.</td>
-        </tr>
-        </tbody>
-    </table>
-
 
 </body>
 </html>

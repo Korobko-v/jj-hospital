@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+<style>
+  body {
+    background: url("https://wallpaperaccess.com/full/1282794.jpg") no-repeat;
+    background-size: 100% 900%;
+  }
+</style>
+<p th:if="${fileId > 0}">
+  <span th:text="${fileSize}"></span>
+  <span th:text="${fileId}"></span>
+  <img th:src="${'/file/show/' + fileId}" alt="">
+</p>
+
+<form method="post" action="/file/upload" enctype="multipart/form-data">
+  <p>
+    <label>Описание:
+      <input type="text" name="description">
+    </label>
+  </p>
+  <p>
+    <input type="file" name="file">
+  </p>
+  <p>
+    <input type="submit">
+  </p>
+</form>
+</body>
+</html>
