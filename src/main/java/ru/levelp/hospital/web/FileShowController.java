@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import ru.levelp.hospital.daoimpl.FileUploadItemRepository;
+import ru.levelp.hospital.dao.FileUploadItemRepository;
 import ru.levelp.hospital.model.FileUploadItem;
 
 import java.io.IOException;

@@ -6,9 +6,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.levelp.hospital.daoimpl.DepartmentDao;
-import ru.levelp.hospital.daoimpl.DoctorDao;
-import ru.levelp.hospital.daoimpl.DoctorsCustomSort;
+import ru.levelp.hospital.dao.DepartmentDao;
+import ru.levelp.hospital.dao.DoctorDao;
+import ru.levelp.hospital.dao.DoctorsCustomSort;
 import ru.levelp.hospital.model.Department;
 import ru.levelp.hospital.model.Doctor;
 

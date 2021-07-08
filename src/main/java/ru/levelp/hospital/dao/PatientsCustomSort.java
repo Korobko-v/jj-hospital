@@ -1,4 +1,4 @@
-package ru.levelp.hospital.daoimpl;
+package ru.levelp.hospital.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

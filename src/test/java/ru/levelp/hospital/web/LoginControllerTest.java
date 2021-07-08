@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.levelp.hospital.TestConfig;
-import ru.levelp.hospital.daoimpl.DoctorDao;
+import ru.levelp.hospital.dao.DoctorDao;
 import ru.levelp.hospital.model.Doctor;
 
 import static org.mockito.Mockito.when;

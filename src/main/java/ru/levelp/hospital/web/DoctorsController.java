@@ -7,9 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import ru.levelp.hospital.daoimpl.DoctorDao;
-import ru.levelp.hospital.daoimpl.PatientDao;
-import ru.levelp.hospital.daoimpl.PatientsCustomSort;
+import ru.levelp.hospital.dao.DoctorDao;
+import ru.levelp.hospital.dao.PatientDao;
+import ru.levelp.hospital.dao.PatientsCustomSort;
 import ru.levelp.hospital.model.Doctor;
 import ru.levelp.hospital.model.Patient;
 

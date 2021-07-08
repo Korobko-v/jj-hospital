@@ -1,18 +1,14 @@
-package ru.levelp.hospital.daoimpl;
+package ru.levelp.hospital.dao;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import ru.levelp.hospital.TestConfig;
 import ru.levelp.hospital.model.Doctor;
 
 import javax.persistence.EntityManager;
-
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 

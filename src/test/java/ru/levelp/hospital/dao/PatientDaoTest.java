@@ -1,18 +1,15 @@
-package ru.levelp.hospital.daoimpl;
+package ru.levelp.hospital.dao;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.levelp.hospital.TestConfig;
 import ru.levelp.hospital.model.Doctor;
 import ru.levelp.hospital.model.Patient;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
