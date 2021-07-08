@@ -64,6 +64,8 @@
     <p>
         <input type="submit" class="btn btn-outline-success">
     </p>
+
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 </form>
 <p>
     <a href="/" class="btn btn-dark btn-sm">На главную</a>

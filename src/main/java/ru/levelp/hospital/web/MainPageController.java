@@ -1,6 +1,8 @@
 package ru.levelp.hospital.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +28,24 @@ public class MainPageController {
     private DoctorsCustomSort sort;
 
     @GetMapping
-    public String index(Model model) {
+    public String index(Model model,
+    @RequestParam(required = false, defaultValue = "10") int count,
+                        Authentication authentication
+    ) {
         List<Doctor> randomDoctors = doctors.findAll();
 
+        boolean loggedIn = authentication != null && authentication.isAuthenticated();
+
+        String userName = "";
+        boolean isAdmin;
+
+        if (loggedIn) {
+            userName = authentication.getName();
+            isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+
+        model.addAttribute("login", userName);
+        model.addAttribute("loggedIn", loggedIn);
         model.addAttribute("randomDoctors", randomDoctors);
         return "index";
     }

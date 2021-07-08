@@ -13,13 +13,17 @@
     }
 </style>
 <p>
-    <span th:if="${doctorSession.loggedIn}"
-          th:text="'Здравствуйте, ' + ${doctorSession.login}"></span>
+    <span th:if="${loggedIn}"
+          th:text="'Здравствуйте, ' + ${login}"></span>
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-    <a href="/logout" th:if="${doctorSession.loggedIn}" class="btn btn-outline-danger me-md-2">Выход</a>
-    <a href="/showPatients" th:if="${doctorSession.loggedIn}" class="btn btn-outline-info me-md-2">Мои пациенты</a>
-    <a href="/login" th:if="${not doctorSession.loggedIn}" class="btn btn-outline-dark me-md-2">Вход</a>
-    <a href="/register" th:if="${not doctorSession.loggedIn}" class="btn btn-outline-dark">Регистрация</a>
+    <form action="/logout" method="post" th:if="${loggedIn}">
+        <button class="btn btn-outline-danger me-md-2" type="submit">Выход</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    </form>
+<!--    <a href="/logout" th:if="${loggedIn}" class="btn btn-outline-danger me-md-2">Выход</a>-->
+    <a href="/showPatients" th:if="${loggedIn}" class="btn btn-outline-info me-md-2">Мои пациенты</a>
+    <a href="/login" th:if="${not loggedIn}" class="btn btn-outline-dark me-md-2">Вход</a>
+    <a href="/register" th:if="${not loggedIn}" class="btn btn-outline-dark">Регистрация</a>
     </div>
     <a href="/showDoctors" class="btn btn-outline-dark">Наши врачи</a>
     <a href="/api/departments/all" class="btn btn-outline-dark">Отделения</a>

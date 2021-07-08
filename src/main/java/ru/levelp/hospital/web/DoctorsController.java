@@ -1,6 +1,7 @@
 package ru.levelp.hospital.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,9 @@ public class DoctorsController {
     @Autowired
     private PatientDao patients;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     @GetMapping("/register")
     private String showRegisterForm(
             @ModelAttribute("form")
@@ -48,9 +52,12 @@ public class DoctorsController {
         if (result.hasErrors()) {
             return "/register";
         }
+
+        String encryptedPassword =encoder.encode(form.getPassword());
+
         try {
             doctors.insert(new Doctor(form.getFirstName(), form.getLastName(),
-                    form.getLogin(), form.getPassword(), form.getSpeciality()));
+                    form.getLogin(), encryptedPassword, form.getSpeciality()));
         }
         catch (Exception cause) {
             result.addError(new FieldError(
@@ -73,29 +80,30 @@ public class DoctorsController {
     }
 
 
-    public String handleLoginForm(
-            @RequestParam String login,
-            @RequestParam String password,
+//    @PostMapping("/login")
+//    public String handleLoginForm(
+//            @RequestParam String login,
+//            @RequestParam String password,
+//
+//
+//            DoctorSession doctorSession
+//    ) {
+//        Doctor doctor = doctors.findByLoginAndPassword(login, password);
+//        if (doctor != null) {
+//            doctorSession.setUserId(doctor.getId());
+//            doctorSession.setLogin(doctor.getLogin());
+//            return "redirect:/";
+//        }
+//
+//        doctorSession.clear();
+//        return "redirect:/login";
+//    }
 
-
-            DoctorSession doctorSession
-    ) {
-        Doctor doctor = doctors.findByLoginAndPassword(login, password);
-        if (doctor != null) {
-            doctorSession.setUserId(doctor.getId());
-            doctorSession.setLogin(doctor.getLogin());
-            return "redirect:/";
-        }
-
-        doctorSession.clear();
-        return "redirect:/login";
-    }
-
-    @GetMapping("/logout")
-    public String handleLogout(DoctorSession doctorSession) {
-        doctorSession.clear();
-        return "redirect:/";
-    }
+//    @GetMapping("/logout")
+//    public String handleLogout(DoctorSession doctorSession) {
+//        doctorSession.clear();
+//        return "redirect:/";
+//    }
 
     @GetMapping("/showPatients")
     public String showPatients(Model model) {

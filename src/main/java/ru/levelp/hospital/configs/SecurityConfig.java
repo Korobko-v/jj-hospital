@@ -3,6 +3,7 @@ package ru.levelp.hospital.configs;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -19,17 +21,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/", "/login", "/register").permitAll()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/**/*.js", "/**/*.css").permitAll()
                 .antMatchers(HttpMethod.GET, "/file/upload").permitAll()
                 .antMatchers("/file/upload").authenticated()
-                .antMatchers("/api/groups/all").permitAll()
-                .antMatchers("/api/*").authenticated()
-                .anyRequest().denyAll();
+                .antMatchers("/api/departments/all").permitAll()
+                .antMatchers(HttpMethod.PUT, "/api/*").hasRole("ADMIN");
+
         http.formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .usernameParameter("login")
                 .passwordParameter("password");
+
+        http.logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .permitAll();
     }
 
     @Bean
